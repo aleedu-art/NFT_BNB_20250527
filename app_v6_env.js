@@ -1,15 +1,11 @@
 /**
  * Visualizador de NFTs para BNB Smart Chain Testnet usando Moralis API v2
  * Versão simplificada com foco em compatibilidade máxima
- * Versão 6: Layout aprimorado com formatação de descrição
+ * Versão 6: Layout aprimorado com formatação de descrição e suporte a variáveis de ambiente
  */
 
 // Configuração da API Moralis
-//const MORALIS_API_KEY = "INSIRA_SUA_API_KEY_AQUI"; // Substitua pela sua API key do Moralis
-//const MORALIS_API_KEY = process.env.MORALIS_API_KEY;
-const MORALIS_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjVlYTk4NWU0LTUzZDMtNDA2Yy05ZmMxLTBlODk3NjMwOWQxNyIsIm9yZ0lkIjoiNDQ5MzU0IiwidXNlcklkIjoiNDYyMzQwIiwidHlwZUlkIjoiMTk2MDdiMjUtNDM0Yi00M2Q2LTljNmUtNzcyNjVmN2UwYjNlIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3NDgyOTUyMjMsImV4cCI6NDkwNDA1NTIyM30.KwwtCbfsIYg-L3nytcZ7tYCXHIiHxfupXsnYGbwtSH0" ; // Substitua pela sua API key do Moralis
-
- 
+const MORALIS_API_KEY = process.env.NEXT_PUBLIC_MORALIS_API_KEY || "";
 const BNB_TESTNET_CHAIN_ID = ["0x61", "97"]; // Chain ID da BNB Smart Chain Testnet (hex e decimal)
 const BNB_TESTNET_CHAIN_NAME = "bsc testnet"; // Nome da chain para a API Moralis v2
 const BSCSCAN_TESTNET_URL = "https://testnet.bscscan.com";
@@ -23,6 +19,12 @@ let nftsCache = [];
 // Inicialização quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', function() {
     console.log("Aplicação inicializada");
+    
+    // Verificar se a API key está configurada
+    if (!MORALIS_API_KEY) {
+        console.error("API key do Moralis não configurada. Configure a variável de ambiente NEXT_PUBLIC_MORALIS_API_KEY no Vercel.");
+        showAlert("Por favor, configure a variável de ambiente NEXT_PUBLIC_MORALIS_API_KEY no Vercel", "danger");
+    }
     
     // Configurar event listeners
     document.getElementById('connect-wallet-btn').addEventListener('click', connectWallet);
@@ -306,8 +308,8 @@ async function fetchNFTs() {
         return;
     }
     
-    if (MORALIS_API_KEY === "INSIRA_SUA_API_KEY_AQUI") {
-        showAlert("Por favor, configure sua API key do Moralis no arquivo app_v6.js", "danger");
+    if (!MORALIS_API_KEY) {
+        showAlert("Por favor, configure a variável de ambiente NEXT_PUBLIC_MORALIS_API_KEY no Vercel", "danger");
         console.error("API key do Moralis não configurada");
         return;
     }
