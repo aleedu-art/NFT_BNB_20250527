@@ -1,13 +1,16 @@
 /**
  * Visualizador de NFTs para BNB Smart Chain Testnet usando Moralis API v2
  * Versão simplificada com foco em compatibilidade máxima
- * Versão 5: Layout aprimorado e melhor exibição de imagens
+ * Versão 6: Layout aprimorado com formatação de descrição
  */
 
 // Configuração da API Moralis
 //const MORALIS_API_KEY = "INSIRA_SUA_API_KEY_AQUI"; // Substitua pela sua API key do Moralis
+//const MORALIS_API_KEY = process.env.MORALIS_API_KEY;
+//const MORALIS_API_KEY = const MORALIS_API_KEY = process.env.MORALIS_API_KEY || ""; // Substitua pela sua API key do Moralis
 const MORALIS_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjVlYTk4NWU0LTUzZDMtNDA2Yy05ZmMxLTBlODk3NjMwOWQxNyIsIm9yZ0lkIjoiNDQ5MzU0IiwidXNlcklkIjoiNDYyMzQwIiwidHlwZUlkIjoiMTk2MDdiMjUtNDM0Yi00M2Q2LTljNmUtNzcyNjVmN2UwYjNlIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3NDgyOTUyMjMsImV4cCI6NDkwNDA1NTIyM30.KwwtCbfsIYg-L3nytcZ7tYCXHIiHxfupXsnYGbwtSH0" ; // Substitua pela sua API key do Moralis
 
+ 
 const BNB_TESTNET_CHAIN_ID = ["0x61", "97"]; // Chain ID da BNB Smart Chain Testnet (hex e decimal)
 const BNB_TESTNET_CHAIN_NAME = "bsc testnet"; // Nome da chain para a API Moralis v2
 const BSCSCAN_TESTNET_URL = "https://testnet.bscscan.com";
@@ -305,7 +308,7 @@ async function fetchNFTs() {
     }
     
     if (MORALIS_API_KEY === "INSIRA_SUA_API_KEY_AQUI") {
-        showAlert("Por favor, configure sua API key do Moralis no arquivo app_v5.js", "danger");
+        showAlert("Por favor, configure sua API key do Moralis no arquivo app_v6.js", "danger");
         console.error("API key do Moralis não configurada");
         return;
     }
@@ -439,7 +442,7 @@ function displayNFTs(nfts) {
                 </div>
                 <div class="nft-body">
                     <h5 class="nft-title">${escapeHtml(name)}</h5>
-                    <p class="nft-description">${escapeHtml(description)}</p>
+                    <p class="nft-description">${escapeHtml(getShortDescription(description))}</p>
                     <div class="nft-footer">
                         <span class="nft-id">ID: ${nft.token_id}</span>
                         <a href="#" class="nft-link view-details" data-index="${index}">Ver detalhes</a>
@@ -456,6 +459,99 @@ function displayNFTs(nfts) {
             showNFTDetails(nfts[index]);
         });
     });
+}
+
+/**
+ * Obtém uma versão curta da descrição para exibir no card
+ * @param {string} description - Descrição completa
+ * @returns {string} - Versão curta da descrição
+ */
+function getShortDescription(description) {
+    if (!description) return '';
+    
+    // Verificar se a descrição contém marcadores de análise
+    if (description.includes('**Análise de Sentimentos:**')) {
+        // Extrair apenas a parte inicial antes da análise
+        const parts = description.split('**Análise de Sentimentos:**');
+        return parts[0].trim();
+    }
+    
+    // Limitar a 150 caracteres se não tiver marcadores
+    if (description.length > 150) {
+        return description.substring(0, 147) + '...';
+    }
+    
+    return description;
+}
+
+/**
+ * Formata a descrição para exibir no modal com seções separadas
+ * @param {string} description - Descrição completa
+ * @returns {string} - HTML formatado com seções separadas
+ */
+function formatDescriptionWithSections(description) {
+    if (!description) return '<p>Sem descrição disponível</p>';
+    
+    // Verificar se a descrição contém marcadores de análise
+    const hasAnalysis = description.includes('**Análise de Sentimentos:**');
+    
+    if (!hasAnalysis) {
+        // Se não tiver marcadores, retornar a descrição original
+        return `<p>${escapeHtml(description)}</p>`;
+    }
+    
+    // Extrair a parte inicial (antes da análise)
+    let formattedHtml = '';
+    const parts = description.split('**Análise de Sentimentos:**');
+    
+    if (parts[0].trim()) {
+        formattedHtml += `<p>${escapeHtml(parts[0].trim())}</p>`;
+    }
+    
+    // Processar as seções de análise
+    const sections = [
+        { marker: '**Análise de Sentimentos:**', title: 'Análise de Sentimentos' },
+        { marker: '**Psicologia das Cores:**', title: 'Psicologia das Cores' },
+        { marker: '**Relação com Signos:**', title: 'Relação com Signos' },
+        { marker: '**Linguagem Visual:**', title: 'Linguagem Visual' }
+    ];
+    
+    // Reconstruir o texto após o primeiro marcador
+    let remainingText = '**Análise de Sentimentos:**' + parts[1];
+    
+    // Processar cada seção
+    sections.forEach((section, index) => {
+        if (remainingText.includes(section.marker)) {
+            const sectionParts = remainingText.split(section.marker);
+            
+            // Se não for a primeira seção, pegar o conteúdo da seção anterior
+            if (index > 0) {
+                const sectionContent = sectionParts[0].trim();
+                formattedHtml += `
+                    <div class="analysis-item">
+                        <div class="analysis-title">${sections[index-1].title}</div>
+                        <div class="analysis-content">${escapeHtml(sectionContent)}</div>
+                    </div>
+                `;
+            }
+            
+            // Atualizar o texto restante
+            remainingText = section.marker + sectionParts[1];
+            
+            // Se for a última seção, adicionar seu conteúdo também
+            if (index === sections.length - 1) {
+                const sectionContent = sectionParts[1].trim();
+                formattedHtml += `
+                    <div class="analysis-item">
+                        <div class="analysis-title">${section.title}</div>
+                        <div class="analysis-content">${escapeHtml(sectionContent)}</div>
+                    </div>
+                `;
+            }
+        }
+    });
+    
+    return formattedHtml;
 }
 
 /**
@@ -512,7 +608,11 @@ function showNFTDetails(nft) {
     
     // Preencher o modal com os detalhes do NFT
     document.getElementById('modal-nft-name').textContent = name;
-    document.getElementById('modal-nft-description').textContent = description;
+    
+    // Formatar a descrição com seções
+    const descriptionContainer = document.getElementById('modal-nft-description');
+    descriptionContainer.innerHTML = formatDescriptionWithSections(description);
+    
     document.getElementById('modal-nft-id').textContent = nft.token_id;
     document.getElementById('modal-nft-contract').textContent = formatAddress(nft.token_address);
     document.getElementById('modal-nft-owner').textContent = formatAddress(currentAccount);

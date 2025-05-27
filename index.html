@@ -298,6 +298,34 @@
         .btn-outline-secondary {
             border-radius: 20px;
         }
+        
+        /* Estilos para a seção de análise */
+        .analysis-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-radius: 10px;
+            border-left: 5px solid #6e45e2;
+        }
+        .analysis-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #ccc;
+        }
+        .analysis-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .analysis-title {
+            font-weight: 600;
+            color: #6e45e2;
+            margin-bottom: 5px;
+        }
+        .analysis-content {
+            color: #555;
+            font-size: 0.95rem;
+        }
     </style>
 </head>
 <body>
@@ -422,7 +450,9 @@
                             <div class="nft-details-section">
                                 <div class="nft-details-item">
                                     <div class="nft-details-label">Descrição</div>
-                                    <div id="modal-nft-description" class="nft-details-value">Descrição do NFT</div>
+                                    <div id="modal-nft-description" class="nft-details-value">
+                                        <!-- Descrição formatada será inserida aqui -->
+                                    </div>
                                 </div>
                                 
                                 <div class="nft-details-item">
@@ -484,7 +514,7 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="app_v5.js"></script>
+    <script src="app_v6.js"></script>
     
     <!-- Script inline para garantir que o botão de conexão funcione -->
     <script>
@@ -509,7 +539,7 @@
                             .then(function(accounts) {
                                 console.log("Contas obtidas pelo script de backup:", accounts);
                                 if (accounts.length > 0) {
-                                    // Se o app_v5.js estiver funcionando, ele lidará com isso
+                                    // Se o app_v6.js estiver funcionando, ele lidará com isso
                                     // Caso contrário, atualizamos a interface aqui
                                     if (document.getElementById('wallet-status').textContent === "Desconectado") {
                                         document.getElementById('wallet-status').textContent = "Conectado";
