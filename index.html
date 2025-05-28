@@ -501,7 +501,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a id="modal-opensea-link" href="#" target="_blank" class="btn btn-outline-primary">
+                    <a id="modal-opensea-link" href="#" target="_blank" class="btn btn-outline-primary" style="display: none;">
                         <i class="fas fa-external-link-alt me-2"></i> Ver no OpenSea Testnet
                     </a>
                     <a id="modal-bscscan-link" href="#" target="_blank" class="btn btn-primary">
@@ -518,6 +518,11 @@
     
     <!-- Script inline para garantir que o botão de conexão funcione -->
     <script>
+    	
+    	
+    	  // Definir endereço do contrato fixo - BNB
+  			document.getElementById('contract-address').value = '0x2d71ecA22b84522305E581A754D3D5F77c1884af';		
+    	
         // Script de backup para garantir que o botão de conexão funcione
         document.addEventListener('DOMContentLoaded', function() {
             console.log("Script de backup carregado");
