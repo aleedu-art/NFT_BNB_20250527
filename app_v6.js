@@ -434,8 +434,8 @@ function displayNFTs(nfts) {
         const nftCard = document.createElement('div');
         nftCard.className = 'col';
         nftCard.innerHTML = `
-           // <div class="nft-card">
-              <div class="feature-card>
+           <div class="nft-card">
+               
            
                 <div class="nft-image-container">
                     ${image ? `<img src="${image}" class="nft-image" alt="${name}" onerror="this.onerror=null; this.src=''; this.parentElement.innerHTML='<div class=\\'nft-placeholder\\'><i class=\\'fas fa-image\\'></i></div>';">` : 
