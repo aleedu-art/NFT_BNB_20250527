@@ -355,14 +355,25 @@
             color: white;
         }
         
-        .navbar-dark .navbar-nav .nav-link {
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 500;
-            padding: 10px 15px;
-            border-radius: 8px;
-            transition: all 0.3s;
+       .navbar {
+            background-color: var(--dark-blue) !important;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white !important;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-brand i {
+            color: var(--cyan);
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
         
         .navbar-dark .navbar-nav .nav-link {
             color: rgba(255, 255, 255, 0.8);
@@ -376,7 +387,7 @@
         .navbar-dark .navbar-nav .nav-link.active {
             color: white;
             background-color: rgba(255, 255, 255, 0.1);
-        }
+        }   
         
                        
     </style>
