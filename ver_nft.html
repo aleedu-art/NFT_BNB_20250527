@@ -639,10 +639,7 @@
         // Script de backup para garantir que o botão de conexão funcione
         document.addEventListener('DOMContentLoaded', function() {
             console.log("Script de backup carregado");
-            
-            // 20250601
-            // Verifica se o MetaMask está instalado
-            checkMetaMaskInstallation();  
+
             
             // Verificar se o botão já tem event listener
             const connectButton = document.getElementById('connect-wallet-btn');
@@ -735,6 +732,11 @@
             } else {
                 console.error("Botão de conexão não encontrado pelo script de backup");
             }
+            
+                        // 20250601
+            // Verifica se o MetaMask está instalado
+            checkMetaMaskInstallation(); 
+            
         });
         
         
